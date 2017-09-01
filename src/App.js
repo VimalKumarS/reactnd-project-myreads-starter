@@ -76,17 +76,34 @@ class BooksApp extends React.Component {
       })
 
   }
+
+  onSearchbookSelect(detail, toshelf) {
+    if (detail.shelf === undefined) {
+      //added from search page
+      let _books = this.state.books;
+
+      for (let key in _books) {
+        for (let detial in _books[key].books) {
+          _books[key].books = _books[key]
+            .books
+            .filter(key => key.id !== detail.id);
+        }
+      }
+      detail.shelf = toshelf;
+       _books[toshelf]
+              .books
+              .push(detail);
+      this.setState((state) => {
+        books : _books
+      });
+    }
+  }
   onSelfChange(detail, toshelf) {
     BooksAPI
       .update(detail, toshelf)
       .then(res => {
         let _books = this.state.books;
-        if (detail.shelf === undefined) {
-          //added from search page
-          _books[toshelf]
-            .books
-            .push(detail);
-        } else if (detail.shelf !== toshelf) {
+        if (detail.shelf !== toshelf) {
           // if moved from book list page
           let _currentShelf = detail.shelf;
           _books[_currentShelf].books = _books[_currentShelf]
@@ -120,7 +137,7 @@ class BooksApp extends React.Component {
         <Route
           path='/search'
           render={({history}) => (<SearchBooks onSelfChange={this
-          .onSelfChange
+          .onSearchbookSelect
           .bind(this)}/>)}/>
       </div>
     )
