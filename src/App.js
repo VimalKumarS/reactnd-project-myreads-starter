@@ -83,19 +83,17 @@ class BooksApp extends React.Component {
       let _books = this.state.books;
 
       for (let key in _books) {
-        for (let detial in _books[key].books) {
+        
           _books[key].books = _books[key]
             .books
             .filter(key => key.id !== detail.id);
-        }
+        
       }
       detail.shelf = toshelf;
        _books[toshelf]
               .books
               .push(detail);
-      this.setState((state) => {
-        books : _books
-      });
+      this.setState({ books : _books});
     }
   }
   onSelfChange(detail, toshelf) {
@@ -116,7 +114,7 @@ class BooksApp extends React.Component {
               .push(detail);
           }
 
-          this.setState((state) => {
+          this.setState({
             books : _books
           });
         }

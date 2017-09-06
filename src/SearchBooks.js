@@ -12,7 +12,7 @@ GetImageUrl(detail){
 return detail.imageLinks !== undefined ? detail.imageLinks.thumbnail : ''
   }
 searchBook(query){
-  if(query.trim() !=''){
+  if(query.trim() !==''){
   BooksAPI.search(query.trim(),20).then(res => {    
     this.setState({books: res})
   })}
