@@ -76,24 +76,40 @@ class BooksApp extends React.Component {
       })
 
   }
+  getBookShelf(id) {
+    let shelf = "none"
+    for (let key in this.state.books) {
+      for (let i in this.state.books[key].books) {
+        if (this.state.books[key].books[i].id === id) {
+          shelf = this.state.books[key].books[i].shelf;
+          break;
+        }
+      }
+    }
+    return shelf;
+  }
 
   onSearchbookSelect(detail, toshelf) {
-    if (detail.shelf === undefined) {
-      //added from search page
-      let _books = this.state.books;
+    if (detail.shelf !== undefined) {
+      BooksAPI
+        .update(detail, toshelf)
+        .then(res => {
+          //added from search page
+          let _books = this.state.books;
 
-      for (let key in _books) {
-        
-          _books[key].books = _books[key]
-            .books
-            .filter(key => key.id !== detail.id);
-        
-      }
-      detail.shelf = toshelf;
-       _books[toshelf]
+          for (let key in _books) {
+
+            _books[key].books = _books[key]
               .books
-              .push(detail);
-      this.setState({ books : _books});
+              .filter(key => key.id !== detail.id);
+
+          }
+          detail.shelf = toshelf;
+          _books[toshelf]
+            .books
+            .push(detail);
+          this.setState({books: _books});
+        });
     }
   }
   onSelfChange(detail, toshelf) {
@@ -114,9 +130,7 @@ class BooksApp extends React.Component {
               .push(detail);
           }
 
-          this.setState({
-            books : _books
-          });
+          this.setState({books: _books});
         }
       });
   }
@@ -134,7 +148,11 @@ class BooksApp extends React.Component {
           books={this.state.books}/>)}/>
         <Route
           path='/search'
-          render={({history}) => (<SearchBooks onSelfChange={this
+          render={({history}) => (<SearchBooks
+          getBookShelf={this
+          .getBookShelf
+          .bind(this)}
+          onSelfChange={this
           .onSearchbookSelect
           .bind(this)}/>)}/>
       </div>
